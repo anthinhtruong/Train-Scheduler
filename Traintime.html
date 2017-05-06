@@ -157,15 +157,28 @@
   		
   		var addTrainname = trainSnapshot.name;
   		var addDestination = trainSnapshot.destination;
-  		var addtime = trainSnapshot.time;
+  		var addFirsttrain = trainSnapshot.time;
   		var addFrequency = trainSnapshot.frequency;
+
+
+
+
+  		var theDiff = moment().diff(moment.unix(addFirsttrain), "minutes");
+
+  		var remainTime = theDiff % addFrequency;
+
+  		var arrivalMin = addFrequency - remainTime;
+  		console.log(arrivalMin)
+
+  		// To calculate the arrival time, add the tMinutes to the currrent time
+ 		 var minAways = moment().add(arrivalMin, "m").format("hh:mm A");
 
 
   	$("#train-name-display").append($("<div>").append(addTrainname));
 	$("#destination-display").append($("<div>").append(addDestination));
 	$("#frequency-display").append($("<div>").append(addFrequency));
-	$("#arrival-display").append($("<div>").append(addtime));;
-	$("#away-display").append()
+	$("#arrival-display").append($("<div>").append(arrivalMin));
+	$("#away-display").append($("<div>").append(minAways));
 
 
 
