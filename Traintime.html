@@ -3,9 +3,10 @@
 <head>
 	<title>Choo choo</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="jquery-3.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+	
 	
 </head>
 <body>
@@ -28,18 +29,39 @@
 
 			            <div class="panel-body">
 								<table class="table table-hover" id='train-table'>
-						                <thead>
-							                  <tr>
-							                    <th>Train Name</th>
-							                    <th>Destination</th>
-							                    <th>Frequency (min)</th>
-							                    <th>Next Arrival</th>
-							                    <th>Minutes Away</th>
-							                  </tr>
-						                </thead>
+						                
+										
+										 <tbody>
+												<div class = "row">
 
-						                <tbody>
+							   					 		<div class = "col-md-2">
+															<h4>Train Name</h4>
+															<span id="train-name-display"></span>
+							   					 		</div>
 
+							   					 		<div class = "col-md-2">
+															<h4>Destination</h4>
+															<span id="destination-display"></span>
+							   					 		</div>
+
+							   					 		<div class = "col-md-2">
+															<h4>Frequency (min)</h4>
+															<span id="frequency-display"></span>
+							   					 		</div>
+
+							   					 		<div class = "col-md-2">
+															<h4>Next Arrival</h4>
+															<span id="arrival-display"></span>
+							   					 		</div>
+
+							   					 		<div class = "col-md-2">
+															<h4>Minutes Away</h4>
+															<span id="away-display"></span>
+							   					 		</div>
+
+							   					 		
+
+   												 </div>
 						                </tbody>
 		             			 </table>
 
@@ -59,7 +81,7 @@
 								<form>
 						                <div class="form-group">
 							                  <label for="train-name-input">Train Name</label>
-							                  <input type="text" class="form-control" id="train-name-input">
+							                  <input type="text" class="form-control" id="trainname-input">
 						                </div>
 
 						                <div class="form-group">
@@ -69,7 +91,7 @@
 
 						                <div class="form-group">
 							                  <label for="first-train-input">First Train Time (HH:mm - military time)</label>
-							                  <input type="text" class="form-control" id="first-train-input">
+							                  <input type="text" class="form-control" id="train-time-input">
 						                </div>
 
 						                <div class="form-group">
@@ -77,15 +99,78 @@
 							                  <input type="text" class="form-control" id="frequency-input">
 						                </div>
 
-						                <button type="submit" class="btn btn-primary" id="add-train-btn">Submit</button>
+						                <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
 		              			</form>
               			</div>
 			            
 
 		        </div>
 		</div> 
-		 
 
 
+
+<script type="text/javascript">
+	
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDE6PRis1YuTLOIEerAwP_9kFAqYAKtUjQ",
+    authDomain: "train-hw-206b0.firebaseapp.com",
+    databaseURL: "https://train-hw-206b0.firebaseio.com",
+    projectId: "train-hw-206b0",
+    storageBucket: "train-hw-206b0.appspot.com",
+    messagingSenderId: "540594104009"
+  };
+
+  firebase.initializeApp(config);
+
+
+  var database  = firebase.database();
+
+  $("#submit-button").on("click", function(){
+  		
+
+  		alert("click");
+
+  		var trainName = $("#trainname-input").val().trim();
+  		var trainDestination = $("#destination-input").val().trim();
+  		var trainTime = $("#train-time-input").val().trim();
+  		var trainFrequency = $("#frequency-input").val().trim();
+
+  		
+
+  		database.ref().push({
+			    name: trainName,
+			    destination: trainDestination,
+			    time: trainTime,
+			    frequency: trainFrequency
+		
+  		})
+
+  });
+
+
+
+  database.ref().on("child_added", function(snapshot) {
+  		console.log(snapshot.val())
+  		var trainSnapshot = snapshot.val();
+  		
+  		var addTrainname = trainSnapshot.name;
+  		var addDestination = trainSnapshot.destination;
+  		var addtime = trainSnapshot.time;
+  		var addFrequency = trainSnapshot.frequency;
+
+
+  	$("#train-name-display").append($("<div>").append(addTrainname));
+	$("#destination-display").append($("<div>").append(addDestination));
+	$("#frequency-display").append($("<div>").append(addFrequency));
+	$("#arrival-display").append($("<div>").append(addtime));;
+	$("#away-display").append()
+
+
+
+  })
+
+</script>
 </body>
 </html>
